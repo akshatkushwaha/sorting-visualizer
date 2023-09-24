@@ -8,7 +8,11 @@ export default function SidePanel(props: {
     randomize: (size: number) => void;
 }) {
     const algos = Object.values(Algo);
-    const speeds = Object.values(Speed).filter((speed) => typeof speed === "string");
+    const speeds: { [key: string]: Speed } = {
+        Slow: Speed.Slow,
+        Medium: Speed.Medium,
+        Fast: Speed.Fast,
+    };
     const sizes = [10, 20, 30, 40, 50];
 
     const [algorithm, setAlgorithm] = useState<Algo>(Algo.BubbleSort);
@@ -20,7 +24,6 @@ export default function SidePanel(props: {
     }, []);
 
     const reset = () => {
-        props.stop();
         setAlgorithm(Algo.BubbleSort);
         setSpeed(Speed.Fast);
         setSize(30);
@@ -37,10 +40,10 @@ export default function SidePanel(props: {
                     </label>
                     <Select
                         id="algo"
-                        defaultValue={algos[0]}
-                        onChange={(event: React.SyntheticEvent | null, newValue: string | null) => {
+                        value={algorithm}
+                        onChange={(event: React.SyntheticEvent | null, newValue: Algo | null) => {
                             if (newValue) {
-                                setAlgorithm(newValue as Algo);
+                                setAlgorithm(newValue);
                             }
                         }}
                     >
@@ -59,18 +62,19 @@ export default function SidePanel(props: {
                         </label>
                         <Select
                             id="speed"
+                            value={speed}
                             onChange={(
                                 event: React.SyntheticEvent | null,
                                 newValue: Speed | null
                             ) => {
                                 if (newValue) {
-                                    setSpeed(newValue as Speed);
+                                    setSpeed(newValue);
                                 }
                             }}
                         >
-                            {speeds.map((speed, index) => (
-                                <Option key={index} value={speed}>
-                                    {speed}
+                            {Object.keys(speeds).map((speed, index) => (
+                                <Option key={index} value={speeds[speed]}>
+                                    {speeds[speed]}
                                 </Option>
                             ))}
                         </Select>
@@ -81,7 +85,7 @@ export default function SidePanel(props: {
                         </label>
                         <Select
                             id="size"
-                            defaultValue={sizes[2]}
+                            value={size}
                             onChange={(
                                 event: React.SyntheticEvent | null,
                                 newValue: number | null

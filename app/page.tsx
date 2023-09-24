@@ -6,45 +6,16 @@ import Navbar from "./components/navbar";
 import SidePanel from "./components/sidepanel";
 import { Algo, Speed, Status } from "./algo/enums";
 import { BarType } from "./algo/types";
-import {
-    bubbleSort,
-    selectionSort,
-    insertionSort,
-    mergeSort,
-    quickSort,
-    heapSort,
-} from "./algo/alogs";
+import algorithms from "./algo/alogs";
 
 export default function Home() {
     const [array, setArray] = useState<BarType[]>([]);
 
     const start = (algorithm: Algo, speed: Speed) => {
-        switch (algorithm) {
-            case Algo.BubbleSort:
-                bubbleSort(array, speed, setArray);
-                break;
-            case Algo.SelectionSort:
-                selectionSort(array, speed, setArray);
-                break;
-            case Algo.InsertionSort:
-                insertionSort(array, speed, setArray);
-                break;
-            case Algo.MergeSort:
-                mergeSort(array, speed, setArray);
-                break;
-            case Algo.QuickSort:
-                quickSort(array, speed, setArray);
-                break;
-            case Algo.HeapSort:
-                heapSort(array, speed, setArray);
-                break;
-            default:
-                break;
-        }
+        algorithms[algorithm](array, speed, setArray);
     };
 
     const randomize = (size: number) => {
-        stop();
         const array: BarType[] = [];
         for (let i = 0; i < size; i++) {
             array.push({
@@ -57,6 +28,7 @@ export default function Home() {
 
     const stop = () => {
         // TODO: stop the algorithm
+        window.location.reload();
     };
 
     return (
